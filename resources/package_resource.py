@@ -11,8 +11,8 @@ class Packages(Resource):
 
 class Package(Resource):
     argument = reqparse.RequestParser()
-    argument.add_argument('user_id', type=str, required=True)
     argument.add_argument('name', type=str, required=True)
+    argument.add_argument('user_id', type=str, required=True)
 
     def get(self, package_code):
         package = PackageModel.findPackage(package_code)
@@ -20,13 +20,13 @@ class Package(Resource):
             return package.toJson()
         return {"message": "Package not found"}
 
-    def post(self, packageCode):
-        if PackageModel.findPackage(packageCode):
-            return {"message": "Package '{}' already exists".format(packageCode)}
+    def post(self, package_code):
+        if PackageModel.findPackage(package_code):
+            return {"message": "Package '{}' already exists".format(package_code)}
         packageData = Package.argument.parse_args()
-        newPackage = PackageModel(packageCode, **)
+        newPackage = PackageModel(package_code, **packageData)
         newPackage.savePackage()
-        return newPackage.toJson()
+        return newPackage.toJson(), 200
 
     def put(self):
         pass

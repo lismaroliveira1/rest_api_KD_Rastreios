@@ -4,26 +4,26 @@ from sql_alchemy import database
 class PackageModel(database.Model):
     __tablename__ = 'packages'
 
-    packageCode = database.Column(database.String, primary_key=True)
+    package_code = database.Column(database.String, primary_key=True)
     name = database.Column(database.String(20))
-    user_id = database.Column(database.String)
+    user_id = database.Column(database.String(20))
 
-    def __init__(self, packageCode, name, user_id):
-        self.packageCode = packageCode
+    def __init__(self, package_code, name, user_id):
+        self.package_code = package_code
         self.name = name
         self.user_id = user_id
 
     def toJson(self):
         return {
-            "packageCode": self.packageCode,
+            "package_code": self.package_code,
             "name": self.name,
             "user_id": self.user_id,
             "trackings": []
         }
 
     @classmethod
-    def findPackage(cls, packageCode):
-        package = cls.query.filter_by(packageCode=packageCode).first()
+    def findPackage(cls, package_code):
+        package = cls.query.filter_by(package_code=package_code).first()
         if package:
             return package
         return None
