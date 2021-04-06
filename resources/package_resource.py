@@ -28,8 +28,11 @@ class Package(Resource):
         newPackage.savePackage()
         return newPackage.toJson(), 200
 
-    def put(self):
-        pass
-
-    def delete(self):
-        pass
+    def put(self, package_code):
+        package_data = arguments.parse_args()
+        package = PackageModel.findPackage(package_code)
+        if package:
+            package.updatePackage(package_code, **package_data)
+            package.savePackage()
+            return {"message": "Package updated successfully"}
+        return {"message": "Package not found"}

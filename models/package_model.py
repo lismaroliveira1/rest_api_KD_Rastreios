@@ -35,3 +35,8 @@ class PackageModel(database.Model):
     def delete(self):
         database.session.delete(self)
         database.session.commit()
+
+    def updatePackage(self, package_code, name, user_id):
+        self.package_code = package_code
+        self.name = name
+        self.user_id = user_id
