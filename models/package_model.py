@@ -28,7 +28,7 @@ class PackageModel(database.Model):
             return package
         return None
 
-    def saveTracking(self):
+    def savePackage(self):
         database.session.add(self)
         database.session.commit()
 

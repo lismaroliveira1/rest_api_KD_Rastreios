@@ -19,3 +19,17 @@ class Package(Resource):
         if package:
             return package.toJson()
         return {"message": "Package not found"}
+
+    def post(self, packageCode):
+        if PackageModel.findPackage(packageCode):
+            return {"message": "Package '{}' already exists".format(packageCode)}
+        packageData = Package.argument.parse_args()
+        newPackage = PackageModel(packageCode, **)
+        newPackage.savePackage()
+        return newPackage.toJson()
+
+    def put(self):
+        pass
+
+    def delete(self):
+        pass
