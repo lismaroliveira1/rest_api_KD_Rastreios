@@ -7,6 +7,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 api = Api(app)
 
+
+api.add_resource(SignUp, '/signup')
+
 if __name__ == '__main__':
     from sql_alchemy import database
     database.init_app(app)
