@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_restful import Resource, Api
 from flask_jwt_extended import JWTManager
 from resources.user_resource import SignUp, SignIn
+from resources.package_resource import Packages
 
 
 app = Flask(__name__)
@@ -30,6 +31,9 @@ def InvalidAccessToken(self, token):
 
 api.add_resource(SignUp, '/signup')
 api.add_resource(SignIn, '/signin')
+api.add_resource(SignOut, '/signout')
+
+api.add_resource(Packages, '/packages')
 
 if __name__ == '__main__':
     from sql_alchemy import database
