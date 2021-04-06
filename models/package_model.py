@@ -17,7 +17,8 @@ class PackageModel(database.Model):
         return {
             "package_code": self.package_code,
             "name": self.name,
-            "user_id": self.user_id
+            "user_id": self.user_id,
+            "trackings": []
         }
 
     @classmethod
@@ -39,3 +40,7 @@ class PackageModel(database.Model):
         self.package_code = package_code
         self.name = name
         self.user_id = user_id
+
+    def deletePackage(self):
+        database.session.delete(self)
+        database.session.commit()

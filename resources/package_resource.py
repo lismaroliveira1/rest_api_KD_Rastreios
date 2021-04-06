@@ -6,7 +6,7 @@ from models.package_model import PackageModel
 class Packages(Resource):
     @jwt_required()
     def get(self):
-        return {"packages": [package.toJson() for package in PackageModel.query.all()]}
+        return {"packages": [package.toJson() for package in PackageModel.query.all()]}, 200
 
 
 class Package(Resource):
@@ -29,10 +29,15 @@ class Package(Resource):
         return newPackage.toJson(), 200
 
     def put(self, package_code):
-        package_data = Package.argument.parse_args()
+        package_data = Package.arguments.parse_args()
         package = PackageModel.findPackage(package_code)
         if package:
             package.updatePackage(package_code, **package_data)
             package.savePackage()
             return {"message": "Package updated successfully"}
         return {"message": "Package not found"}
+
+    def delete(self, package_code):
+        package = PackageModel.findPackage(package_code)
+        if package:
+            package.delete()
