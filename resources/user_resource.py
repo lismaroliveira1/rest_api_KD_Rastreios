@@ -41,3 +41,11 @@ class SignIn(Resource):
                     "uid": user.user_id,
                     "loggedAt": timeNow}, 200
             return {"message": "The username or passward is incorrect"}, 401
+
+
+class SignOut(Resource):
+    @jwt_required()
+    def post(self):
+        jwt_id = get_jwt()['jti']
+        BLACKLIST.add(jwt_id)
+        return {"message": "Logged out Successfully"}, 200
