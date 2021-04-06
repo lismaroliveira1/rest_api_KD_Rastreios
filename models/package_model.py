@@ -17,8 +17,7 @@ class PackageModel(database.Model):
         return {
             "package_code": self.package_code,
             "name": self.name,
-            "user_id": self.user_id,
-            "trackings": []
+            "user_id": self.user_id
         }
 
     @classmethod
