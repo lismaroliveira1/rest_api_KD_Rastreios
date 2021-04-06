@@ -7,3 +7,15 @@ class Packages(Resource):
     @jwt_required()
     def get(self):
         return {"packages": [package.toJson for package in PackageModel.query.all()]}, 200
+
+
+class Package(Resource):
+    argument = reqparse.RequestParser()
+    argument.add_argument('user_id', type=str, required=True)
+    argument.add_argument('name', type=str, required=True)
+
+    def get(self, package_code):
+        package = PackageModel.findPackage(package_code)
+        if package:
+            return package.toJson()
+        return {"message": "Package not found"}
