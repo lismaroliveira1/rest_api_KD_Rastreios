@@ -18,7 +18,7 @@ class PackageModel(database.Model):
     def toJson(self):
         return {
             "packageCode": self.packageCode,
-            "name": self.name
+            "name": self.name,
             "trackings": []
         }
 
