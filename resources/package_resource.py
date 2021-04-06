@@ -4,7 +4,6 @@ from models.package_model import PackageModel
 
 
 class Packages(Resource):
-    @jwt_required()
     def get(self):
         return {"packages": [package.toJson() for package in PackageModel.query.all()]}, 200
 
@@ -17,15 +16,18 @@ class Package(Resource):
     def get(self, package_code):
         package = PackageModel.findPackage(package_code)
         if package:
-            return package.toJson()
-        return {"message": "Package not found"}
+            return package.toJson(), 200
+        return {"message": "Package not found"}, 400
 
     def post(self, package_code):
         if PackageModel.findPackage(package_code):
-            return {"message": "Package '{}' already exists".format(package_code)}
+            return {"message": "Package '{}' already exists".format(package_code)}, 409
         packageData = Package.argument.parse_args()
         newPackage = PackageModel(package_code, **packageData)
-        newPackage.savePackage()
+        try:
+            newPackage.savePackage()
+        except:
+            return{'message': "Internal server error"}, 500
         return newPackage.toJson(), 200
 
     def put(self, package_code):
@@ -33,11 +35,19 @@ class Package(Resource):
         package = PackageModel.findPackage(package_code)
         if package:
             package.updatePackage(package_code, **package_data)
-            package.savePackage()
-            return {"message": "Package updated successfully"}
-        return {"message": "Package not found"}
+            try:
+                newPackage.savePackage()
+            except:
+                return{'message': "Internal server error"}, 500
+            return {"message": "Package updated successfully"}, 200
+        return {"message": "Package not found"}, 400
 
     def delete(self, package_code):
         package = PackageModel.findPackage(package_code)
         if package:
-            package.delete()
+            try:
+                newPackage.deletePackage()
+            except:
+                return{'message': "Internal server error"}, 500
+            return {"message": "Package deleted successfully"}, 200
+        return {"message": "Package not found"}, 400

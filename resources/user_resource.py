@@ -17,12 +17,16 @@ class SignUp(Resource):
     def post(self):
         userData = arguments.parse_args()
         if UserModel.findByEmail(userData['email']):
-            return {"message": "The user {} already exists".format(userData['email'])}
+            return {"message": "The user {} already exists".format(userData['email'])}, 401
         user_id = ''.join(random.choices(string.ascii_uppercase +
                                          string.digits, k=16))
         userData['user_id'] = user_id
         newUser = UserModel(** userData)
-        newUser.createUser()
+        try:
+            newUser.createUser()
+        except:
+            return{'message': "Internal server error"}, 500
+
         access_token = create_access_token(identity=newUser.user_id)
         return {"message": "User '{}' created successfully".format(newUser.email),
                 "access_token": access_token,
@@ -47,5 +51,8 @@ class SignOut(Resource):
     @jwt_required()
     def post(self):
         jwt_id = get_jwt()['jti']
-        BLACKLIST.add(jwt_id)
+        try:
+            BLACKLIST.add(jwt_id)
+        except:
+            return{'message': "Internal server error"}, 500
         return {"message": "Logged out Successfully"}, 200
