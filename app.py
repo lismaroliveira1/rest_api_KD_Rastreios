@@ -34,7 +34,7 @@ api.add_resource(SignUp, '/signup')
 api.add_resource(SignIn, '/signin')
 api.add_resource(SignOut, '/signout')
 
-api.add_resource(Packages, '/packages')
+api.add_resource(Packages, '/packages/<string:user_id>')
 api.add_resource(Package, '/package/<string:package_code>')
 
 api.add_resource(Trackings, '/trackings')

@@ -4,8 +4,8 @@ from models.package_model import PackageModel
 
 
 class Packages(Resource):
-    def get(self):
-        return {"packages": [package.toJson() for package in PackageModel.query.all()]}, 200
+    def get(self, 'user_id'):
+        return {"packages": [package.toJson() for package in PackageModel.query.filter_by(user_id=user_id)all()]}, 200
 
 
 class Package(Resource):
