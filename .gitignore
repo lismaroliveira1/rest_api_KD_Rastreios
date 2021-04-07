@@ -1,2 +1,2 @@
 venv
-./databank.db
+*.db 
