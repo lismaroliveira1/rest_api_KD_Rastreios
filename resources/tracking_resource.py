@@ -1,8 +1,10 @@
 from flask_restful import Resource, reqparse
 from models.tracking_model import TrackingModel
+from flask_jwt_extended import jwt_required
 
 
 class Trackings(Resource):
+    @jwt_required()
     def get(self):
         return {"trackings": [tracking.toJson() for tracking in TrackingModel.query.all()]}
 
@@ -17,12 +19,14 @@ class Tracking(Resource):
     arguments.add_argument('status', type=str)
     arguments.add_argument('package_code', type=str)
 
+    @jwt_required()
     def get(self, tracking_id):
         tracking = TrackingModel.findTracking(tracking_id)
         if tracking:
             return tracking.toJson(), 200
         return {"message": "tracking not found"}, 404
 
+    @jwt_required()
     def post(self, tracking_id):
         trackingData = Tracking.arguments.parse_args()
         if TrackingModel.findTracking(tracking_id):
@@ -34,6 +38,7 @@ class Tracking(Resource):
         except:
             return {"message": "Internal server error"}, 500
 
+    @jwt_required()
     def put(self, tracking_id):
         tracking = TrackingModel.findTracking(tracking_id)
         tracking_data = Tracking.arguments.parse_args()
@@ -51,6 +56,7 @@ class Tracking(Resource):
         except:
             return {"message": "Internal server error"}, 500
 
+    @jwt_required()
     def delete(self, tracking_id):
         tracking = TrackingModel.findTracking(tracking_id)
         if tracking:

@@ -4,6 +4,7 @@ from models.package_model import PackageModel
 
 
 class Packages(Resource):
+    @jwt_required()
     def get(self, user_id):
         return {"packages": [package.toJson() for package in PackageModel.query.filter_by(user_id=user_id).all()]}, 200
 
@@ -13,12 +14,14 @@ class Package(Resource):
     argument.add_argument('name', type=str, required=True)
     argument.add_argument('user_id', type=str, required=True)
 
+    @jwt_required()
     def get(self, package_code):
         package = PackageModel.findPackage(package_code)
         if package:
             return package.toJson(), 200
         return {"message": "Package not found"}, 400
 
+    @jwt_required()
     def post(self, package_code):
         if PackageModel.findPackage(package_code):
             return {"message": "Package '{}' already exists".format(package_code)}, 409
@@ -30,6 +33,7 @@ class Package(Resource):
             return{'message': "Internal server error"}, 500
         return newPackage.toJson(), 200
 
+    @jwt_required()
     def put(self, package_code):
         package = PackageModel.findPackage(package_code)
         package_data = Package.argument.parse_args()
@@ -47,6 +51,7 @@ class Package(Resource):
         except:
             return {"message": "Internal server error"}
 
+    @jwt_required()
     def delete(self, package_code):
         package = PackageModel.findPackage(package_code)
         if package:
