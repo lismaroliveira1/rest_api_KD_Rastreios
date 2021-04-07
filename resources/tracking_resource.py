@@ -20,4 +20,21 @@ class Tracking(Resource):
         tracking = TrackingModel.findTracking(tracking_id)
         if tracking:
             return tracking.toJson(), 200
-        return {"message": "tracking not found"}, 400
+        return {"message": "tracking not found"}, 404
+
+    def post(self, tracking_id):
+        trackingData = Tracking.arguments.parse_args()
+        if TrackingModel.findTracking(tracking_id):
+            return {"message": "Tracking already exists"}
+        tracking = TrackingModel(**trackingData)
+        try:
+            tracking.saveTracking()
+            return tracking.toJson(), 201
+        except:
+            return {"message": "Internal server error"}, 500
+
+    def put(self):
+        pass
+
+    def delete(self):
+        pass

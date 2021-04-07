@@ -35,7 +35,7 @@ class TrackingModel(database.Model):
         return None
 
     def saveTracking(self):
-        database.session.save(self)
+        database.session.add(self)
         database.session.commit()
 
     def updateTracking(self):

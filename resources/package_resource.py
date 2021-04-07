@@ -31,9 +31,9 @@ class Package(Resource):
         return newPackage.toJson(), 200
 
     def put(self, package_code):
-        package_data = Package.arguments.parse_args()
         package = PackageModel.findPackage(package_code)
         if package:
+            package_data = Package.arguments.parse_args()
             package.updatePackage(package_code, **package_data)
             try:
                 newPackage.savePackage()
