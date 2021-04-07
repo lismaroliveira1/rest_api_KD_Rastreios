@@ -31,7 +31,7 @@ class SignUp(Resource):
         return {"message": "User '{}' created successfully".format(newUser.email),
                 "access_token": access_token,
                 "uid": newUser.user_id,
-                "createdAt": timeNow}, 201
+                "created_at": timeNow}, 201
 
 
 class SignIn(Resource):
@@ -44,7 +44,7 @@ class SignIn(Resource):
                     "access_token": access_token,
                     "uid": user.user_id,
                     "loggedAt": timeNow}, 200
-            return {"message": "The username or passward is incorrect"}, 401
+        return {"message": "The username or passward is incorrect"}, 401
 
 
 class SignOut(Resource):

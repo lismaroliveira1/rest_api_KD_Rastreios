@@ -47,6 +47,7 @@ class TrackingModel(database.Model):
         self.hour = hour
         self.origin = origin
         self.status = status
+        self.package_code = package_code
 
     def deleteTracking(self):
         database.session.delete(self)
