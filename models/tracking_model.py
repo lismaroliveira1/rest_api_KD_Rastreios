@@ -4,7 +4,8 @@ from sql_alchemy import database
 class TrackingModel(database.Model):
     __tablename__: 'trackings'
 
-    date = database.Column(database.String(10), required=True)
+    tracking_id = database.Column(database.Integer, primary_key=True)
+    date = database.Column(database.String(10))
     destiny = database.Column(database.String(80))
     hour = database.Column(database.String(10))
     origin = database.Column(database.String(80))
@@ -25,6 +26,13 @@ class TrackingModel(database.Model):
             "origin": self.origin,
             "status": self.status
         }
+
+    @classmethod
+    def findTracking(cls, tracking_id):
+        package = cls.query.filter_by(tracking_id=tracking_id).first()
+        if package:
+            return package
+        return None
 
     def saveTracking(self):
         database.session.save(self)
