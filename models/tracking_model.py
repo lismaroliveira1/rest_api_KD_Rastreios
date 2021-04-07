@@ -2,7 +2,7 @@ from sql_alchemy import database
 
 
 class TrackingModel(database.Model):
-    __tablename__: 'trackings'
+    __tablename__ = 'trackings'
 
     tracking_id = database.Column(database.Integer, primary_key=True)
     date = database.Column(database.String(10))
@@ -29,22 +29,22 @@ class TrackingModel(database.Model):
 
     @classmethod
     def findTracking(cls, tracking_id):
-        package = cls.query.filter_by(tracking_id=tracking_id).first()
-        if package:
-            return package
+        tracking = cls.query.filter_by(tracking_id=tracking_id).first()
+        if tracking:
+            return tracking
         return None
 
     def saveTracking(self):
         database.session.add(self)
         database.session.commit()
 
-    def updateTracking(self):
+    def updateTracking(self, date, destiny, hour, origin, status):
         self.date = date
         self.destiny = destiny
         self.hour = hour
         self.origin = origin
         self.status = status
 
-    def deletetracking(self):
+    def deleteTracking(self):
         database.session.delete(self)
         database.session.commit()

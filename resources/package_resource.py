@@ -19,7 +19,7 @@ class Package(Resource):
             return package.toJson(), 200
         return {"message": "Package not found"}, 400
 
-    def post(self, package_code):
+    def post(self):
         if PackageModel.findPackage(package_code):
             return {"message": "Package '{}' already exists".format(package_code)}, 409
         packageData = Package.argument.parse_args()
@@ -32,21 +32,26 @@ class Package(Resource):
 
     def put(self, package_code):
         package = PackageModel.findPackage(package_code)
+        package_data = Package.argument.parse_args()
         if package:
-            package_data = Package.arguments.parse_args()
             package.updatePackage(package_code, **package_data)
             try:
-                newPackage.savePackage()
+                package.savePackage()
+                return package.toJson(), 200
             except:
-                return{'message': "Internal server error"}, 500
-            return {"message": "Package updated successfully"}, 200
-        return {"message": "Package not found"}, 400
+                return {'message': "Internal server error"}, 500
+        new_package = PackageModel(package_code, **package_data)
+        try:
+            new_package.savePackage()
+            return new_package.toJson(), 201
+        except:
+            return {"message": "Internal server error"}
 
     def delete(self, package_code):
         package = PackageModel.findPackage(package_code)
         if package:
             try:
-                newPackage.deletePackage()
+                package.deletePackage()
             except:
                 return{'message': "Internal server error"}, 500
             return {"message": "Package deleted successfully"}, 200

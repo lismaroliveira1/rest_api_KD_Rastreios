@@ -38,7 +38,7 @@ api.add_resource(Packages, '/packages')
 api.add_resource(Package, '/package/<string:package_code>')
 
 api.add_resource(Trackings, '/trackings')
-api.add_resource(Tracking, '/tracking/<string:tracking_id>')
+api.add_resource(Tracking, '/tracking/<int:tracking_id>')
 
 if __name__ == '__main__':
     from sql_alchemy import database
