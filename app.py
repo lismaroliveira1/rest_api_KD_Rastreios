@@ -3,6 +3,7 @@ from flask_restful import Resource, Api
 from flask_jwt_extended import JWTManager
 from resources.user_resource import SignUp, SignIn, SignOut
 from resources.package_resource import Packages, Package
+from resources.tracking_resource import Trackings
 from blacklist import BLACKLIST
 
 app = Flask(__name__)
@@ -34,7 +35,10 @@ api.add_resource(SignIn, '/signin')
 api.add_resource(SignOut, '/signout')
 
 api.add_resource(Packages, '/packages')
-api.add_resource(Package, '/packages/<string:package_code>')
+api.add_resource(Package, '/package/<string:package_code>')
+
+api.add_resource(Trackings, '/trackings')
+
 
 if __name__ == '__main__':
     from sql_alchemy import database
