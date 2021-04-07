@@ -7,6 +7,7 @@ class PackageModel(database.Model):
     package_code = database.Column(database.String, primary_key=True)
     name = database.Column(database.String(20))
     user_id = database.Column(database.String(20))
+    trackings = database.relationship('TrackingModel')
 
     def __init__(self, package_code, name, user_id):
         self.package_code = package_code
@@ -18,7 +19,7 @@ class PackageModel(database.Model):
             "package_code": self.package_code,
             "name": self.name,
             "user_id": self.user_id,
-            "trackings": []
+            "trackings": [tracking.toJson() for tracking in self.trackings]
         }
 
     @classmethod

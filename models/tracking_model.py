@@ -10,13 +10,16 @@ class TrackingModel(database.Model):
     hour = database.Column(database.String(10))
     origin = database.Column(database.String(80))
     status = database.Column(database.String(80))
+    package_code = database.Column(
+        database.String, database.ForeignKey('packages.package_code'))
 
-    def __init__(self, date, destiny, hour, origin, status):
+    def __init__(self, date, destiny, hour, origin, status, package_code):
         self.date = date
         self.destiny = destiny
         self.hour = hour
         self.origin = origin
         self.status = status
+        self.package_code = package_code
 
     def toJson(self):
         return {
