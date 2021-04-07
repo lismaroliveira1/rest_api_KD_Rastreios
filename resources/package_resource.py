@@ -19,7 +19,7 @@ class Package(Resource):
             return package.toJson(), 200
         return {"message": "Package not found"}, 400
 
-    def post(self):
+    def post(self, package_code):
         if PackageModel.findPackage(package_code):
             return {"message": "Package '{}' already exists".format(package_code)}, 409
         packageData = Package.argument.parse_args()

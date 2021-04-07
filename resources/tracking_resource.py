@@ -15,6 +15,7 @@ class Tracking(Resource):
     arguments.add_argument('hour', type=str)
     arguments.add_argument('origin', type=str)
     arguments.add_argument('status', type=str)
+    arguments.add_argument('package_code', type=str)
 
     def get(self, tracking_id):
         tracking = TrackingModel.findTracking(tracking_id)
