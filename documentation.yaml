@@ -420,7 +420,44 @@ paths:
                 type: string
         500:
           description: Internal server error
-  /tracking{package_code}:
+  /tracking{tracking_id}:
+    get:
+      tags:
+      - trackings
+      summary: Get a package
+      description: Get package by tracking id
+      operationId: get_package
+      produces:
+      - application/json
+      parameters:
+      - name: package_code
+        in: path
+        description: Tracking identification
+        required: true
+        type: string
+        format: id
+      responses:
+        200:
+          description: successful operation
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              date:
+                type: string
+              destiny:
+                type: string
+              hour:
+                type: string
+              origin:
+                type: string
+              status:
+                type: string
+              package_code:
+                type: string
+        500:
+          description: Internal server error
     post:
       tags:
       - trackings
