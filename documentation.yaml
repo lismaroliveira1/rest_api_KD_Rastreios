@@ -1,18 +1,17 @@
----
-swagger: "2.0"
+swagger: '2.0'
 info:
   description: This APi is used for KD Rastreios Application
   version: 1.0.0
   title: KD Rastreios API
   termsOfService: http://swagger.io/terms/
   contact:
-    name: Lismar Oliveira
     email: englismaroliveira@gmail.com
+    name: Lismar Oliveira
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-host: virtserver.swaggerhub.com
-basePath: /lismaroliveira/kdrastreios/1.0.0
+# host: petstore.swagger.io
+# basePath: /v2
 tags:
 - name: user
   description: All operations about users
@@ -29,9 +28,8 @@ tags:
   externalDocs:
     description: Find out more about our store
     url: http://swagger.io
-schemes:
-- https
-- http
+# schemes:
+# - http
 paths:
   /signup:
     post:
@@ -48,20 +46,46 @@ paths:
         description: Create user object
         required: true
         schema:
-          $ref: '#/definitions/body'
+            type: object
+            required:
+              - userName
+              - email
+              - password
+            properties:
+              userName:
+                type: string
+              email:
+                type: string
+              password:
+                type: string
       responses:
-        "201":
+        201:
           description: User fulano was created successfully
           schema:
-            $ref: '#/definitions/inline_response_201'
-        "401":
+            type: object
+            properties:
+              message:
+                type: string
+              access_token:
+                type: string
+              uid:
+                type: string
+              created_at:
+                type: string
+        401:
           description: The user already exists
           schema:
-            $ref: '#/definitions/inline_response_401'
-        "500":
+            type: object
+            properties:
+              message:
+                type: string
+        500:
           description: Internal server error
           schema:
-            $ref: '#/definitions/inline_response_401'
+            type: object
+            properties:
+              message:
+                type: string
   /signin:
     post:
       tags:
@@ -76,16 +100,42 @@ paths:
         description: Create user object
         required: true
         schema:
-          $ref: '#/definitions/body_1'
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+              password:
+                type: string
       responses:
-        "201":
+        201:
           description: User fulano was logged successfully
           schema:
-            $ref: '#/definitions/inline_response_201'
-        "401":
+            type: object
+            properties:
+              message:
+                type: string
+              access_token:
+                type: string
+              uid:
+                type: string
+              created_at:
+                type: string
+        401:
           description: Invalid username/password supplied
           schema:
-            $ref: '#/definitions/inline_response_201'
+            type: object
+            properties:
+              message:
+                type: string
+              access_token:
+                type: string
+              uid:
+                type: string
+              created_at:
+                type: string
   /signout:
     post:
       tags:
@@ -94,12 +144,14 @@ paths:
       operationId: signout
       produces:
       - application/json
-      parameters: []
       responses:
-        "200":
+        200:
           description: successful operation
           schema:
-            $ref: '#/definitions/inline_response_401'
+            type: object
+            properties:
+              message:
+                type: string
   /user/{username}:
     get:
       tags:
@@ -112,17 +164,17 @@ paths:
       parameters:
       - name: username
         in: path
-        description: The name that needs to be fetched. Use user1 for testing.
+        description: The name that needs to be fetched. Use user1 for testing. 
         required: true
         type: string
       responses:
-        "200":
+        200:
           description: successful operation
           schema:
             $ref: '#/definitions/User'
-        "400":
+        400:
           description: Invalid username supplied
-        "404":
+        404:
           description: User not found
     delete:
       tags:
@@ -139,15 +191,15 @@ paths:
         required: true
         type: string
       responses:
-        "400":
+        400:
           description: Invalid username supplied
-        "404":
+        404:
           description: User not found
   /packages/{user_id}:
     get:
       tags:
       - packages
-      summary: Find all the packages filtered by
+      summary: Find all the packages filtered by 
       description: Returns all the package's user object
       operationId: get_packages
       produces:
@@ -160,13 +212,50 @@ paths:
         type: integer
         format: int64
       responses:
-        "200":
+        200:
           description: successful operation
           schema:
-            $ref: '#/definitions/inline_response_200'
-        "500":
+            type: object
+            properties:
+              package_code:
+                type: string
+              name:
+                type: string
+              user_id:
+                type: string
+              trackings:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    date:
+                      type: string
+                    destiny:
+                      type: string
+                    hour:
+                      type: string
+                    origin:
+                      type: string
+                    status:
+                      type: string
+                example:
+                  - id: 0
+                    date: 05/08/2021
+                    destiny: Salvador, BA
+                    hour: 14:52
+                    origin: Rio das Ostras. RJ
+                    status: A caminho
+                  - id: 1
+                    date: 05/08/2021
+                    destiny: Salvador, BA
+                    hour: 14:52
+                    origin: Rio das Ostras. RJ
+                    status: Objeto entregue ao destinatário
+        500:
           description: Internal server error
-  /packages{package_code}:
+  /package{package_code}:
     post:
       tags:
       - packages
@@ -187,13 +276,274 @@ paths:
         description: Create user object
         required: true
         schema:
-          $ref: '#/definitions/body_2'
+            type: object
+            required:
+              - name
+              - user_id
+            properties:
+              name:
+                type: string
+              user_id:
+                type: string
       responses:
-        "200":
+        200:
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        401:
+          description: The package already exists
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
+          description: Internal server error
+    put:
+      tags:
+      - packages
+      summary: Create a new package
+      description: Update package object
+      operationId: update_package
+      produces:
+      - application/json
+      parameters:
+      - name: package_code
+        in: path
+        description: ID of pet to return
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: body
+        description: Create user object
+        required: true
+        schema:
+            type: object
+            required:
+              - name
+              - user_id
+            properties:
+              name:
+                type: string
+              user_id:
+                type: string
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        401:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
+          description: Internal server error
+    delete:
+      tags:
+      - packages
+      summary: Create a new package
+      description: Update package object
+      operationId: update_package
+      produces:
+      - application/json
+      parameters:
+      - name: package_code
+        in: path
+        description: ID of pet to return
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        401:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
+          description: Internal server error
+      security:
+      - api_key: []
+  /trackings/{package_code}:
+    get:
+      tags:
+      - trackings
+      summary: Find all the trackings filtered by tracking_code
+      description: Returns all the package's user object
+      operationId: get_trackings
+      produces:
+      - application/json
+      parameters:
+      - name: package_code
+        in: path
+        description: Tracking identification of package to return the trackings
+        required: true
+        type: string
+        format: uuid
+      responses:
+        200:
           description: successful operation
           schema:
-            $ref: '#/definitions/inline_response_200'
-        "500":
+            type: object
+            properties:
+              id:
+                type: string
+              date:
+                type: string
+              destiny:
+                type: string
+              hour:
+                type: string
+              origin:
+                type: string
+              status:
+                type: string
+              package_code:
+                type: string
+        500:
+          description: Internal server error
+  /tracking{package_code}:
+    post:
+      tags:
+      - trackings
+      summary: Create a new package
+      description: Create package object
+      operationId: create_package
+      produces:
+      - application/json
+      parameters:
+      - name: package_code
+        in: path
+        description: tracking Id of pet to return
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: body
+        description: Create user object
+        required: true
+        schema:
+            type: object
+            required:
+              - name
+              - user_id
+            properties:
+              name:
+                type: string
+              user_id:
+                type: string
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        401:
+          description: The package already exists
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
+          description: Internal server error
+    put:
+      tags:
+      - trackings
+      summary: Create a new package
+      description: Update package object
+      operationId: update_package
+      produces:
+      - application/json
+      parameters:
+      - name: package_code
+        in: path
+        description: ID of pet to return
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: body
+        description: Create user object
+        required: true
+        schema:
+            type: object
+            required:
+              - name
+              - user_id
+            properties:
+              name:
+                type: string
+              user_id:
+                type: string
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        401:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
+          description: Internal server error
+    delete:
+      tags:
+      - trackings
+      summary: Create a new package
+      description: Update package object
+      operationId: update_package
+      produces:
+      - application/json
+      parameters:
+      - name: package_code
+        in: path
+        description: ID of pet to return
+        required: true
+        type: integer
+        format: int64
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        401:
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        500:
           description: Internal server error
       security:
       - api_key: []
@@ -328,93 +678,12 @@ definitions:
         type: string
       message:
         type: string
-  body:
-    type: object
-    required:
-    - email
-    - password
-    - userName
-    properties:
-      userName:
-        type: string
-      email:
-        type: string
-      password:
-        type: string
-  inline_response_201:
-    type: object
-    properties:
-      message:
-        type: string
-      access_token:
-        type: string
-      uid:
-        type: string
-      created_at:
-        type: string
-  inline_response_401:
-    type: object
-    properties:
-      message:
-        type: string
-  body_1:
-    type: object
-    required:
-    - email
-    - password
-    properties:
-      email:
-        type: string
-      password:
-        type: string
-  inline_response_200_trackings:
-    type: object
-    properties:
-      id:
-        type: integer
-      date:
-        type: string
-      destiny:
-        type: string
-      hour:
-        type: string
-      origin:
-        type: string
-      status:
-        type: string
-  inline_response_200:
-    type: object
-    properties:
-      package_code:
-        type: string
-      name:
-        type: string
-      user_id:
-        type: string
-      trackings:
-        type: array
-        example:
-        - id: 0
-          date: 05/08/2021
-          destiny: Salvador, BA
-          hour: 892
-          origin: Rio das Ostras. RJ
-          status: A caminho
-        - id: 1
-          date: 05/08/2021
-          destiny: Salvador, BA
-          hour: 892
-          origin: Rio das Ostras. RJ
-          status: Objeto entregue ao destinatário
-        items:
-          $ref: '#/definitions/inline_response_200_trackings'
-  body_2:
-    type: object
-    properties:
-      email:
-        type: string
-      password:
-        type: string
 externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /lismaroliveira/kdrastreios/1.0.0
+schemes:
+ - https
+ - http

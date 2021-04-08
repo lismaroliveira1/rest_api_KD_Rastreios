@@ -24,7 +24,7 @@ class Package(Resource):
     @jwt_required()
     def post(self, package_code):
         if PackageModel.findPackage(package_code):
-            return {"message": "Package '{}' already exists".format(package_code)}, 409
+            return {"message": "Package '{}' already exists".format(package_code)}, 401
         packageData = Package.argument.parse_args()
         newPackage = PackageModel(package_code, **packageData)
         try:
