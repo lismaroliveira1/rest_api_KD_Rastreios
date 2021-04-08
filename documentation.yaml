@@ -461,21 +461,21 @@ paths:
     post:
       tags:
       - trackings
-      summary: Create a new package
+      summary: Create a new tracking
       description: Create package object
       operationId: create_package
       produces:
       - application/json
       parameters:
-      - name: package_code
+      - name: tracking_id
         in: path
-        description: tracking Id of pet to return
+        description: Tracking identification
         required: true
-        type: integer
-        format: int64
+        type: string
+        format: id
       - in: body
         name: body
-        description: Create user object
+        description: Create a tracking object
         required: true
         schema:
             type: object
@@ -483,17 +483,35 @@ paths:
               - name
               - user_id
             properties:
-              name:
+              date:
                 type: string
-              user_id:
+              destiny:
+                type: string
+              hour:
+                type: string
+              origin:
+                type: string
+              status:
+                type: string
+              package_code:
                 type: string
       responses:
-        200:
+        201:
           description: Successful operation
           schema:
             type: object
             properties:
-              message:
+              date:
+                type: string
+              destiny:
+                type: string
+              hour:
+                type: string
+              origin:
+                type: string
+              status:
+                type: string
+              package_code:
                 type: string
         401:
           description: The package already exists
@@ -507,9 +525,9 @@ paths:
     put:
       tags:
       - trackings
-      summary: Create a new package
-      description: Update package object
-      operationId: update_package
+      summary: Update or create a tracking
+      description: Update or create a tracking object
+      operationId: update_tracking
       produces:
       - application/json
       parameters:
