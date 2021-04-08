@@ -531,12 +531,12 @@ paths:
       produces:
       - application/json
       parameters:
-      - name: package_code
+      - name: tracking_id
         in: path
-        description: ID of pet to return
+        description: Tracking identification
         required: true
-        type: integer
-        format: int64
+        type: string
+        format: id
       - in: body
         name: body
         description: Create user object
@@ -544,12 +544,23 @@ paths:
         schema:
             type: object
             required:
-              - name
-              - user_id
+              - date
+              - destiny
+              - hour
+              - origin
+              - status
             properties:
-              name:
+              date:
                 type: string
-              user_id:
+              destiny:
+                type: string
+              hour:
+                type: string
+              origin:
+                type: string
+              status:
+                type: string
+              package_code:
                 type: string
       responses:
         200:
@@ -571,7 +582,7 @@ paths:
     delete:
       tags:
       - trackings
-      summary: Create a new package
+      summary: Delete a tracking
       description: Update package object
       operationId: update_package
       produces:
