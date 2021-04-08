@@ -30,7 +30,7 @@ class Tracking(Resource):
     def post(self, tracking_id):
         trackingData = Tracking.arguments.parse_args()
         if TrackingModel.findTracking(tracking_id):
-            return {"message": "Tracking already exists"}, 401
+            return {"message": "Tracking already exists"}, 402
         tracking = TrackingModel(**trackingData)
         try:
             tracking.saveTracking()

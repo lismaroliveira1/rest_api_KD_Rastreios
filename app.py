@@ -5,14 +5,22 @@ from resources.user_resource import SignUp, SignIn, SignOut
 from resources.package_resource import Packages, Package
 from resources.tracking_resource import Trackings, Tracking
 from blacklist import BLACKLIST
+from sql_alchemy import database
+
 
 app = Flask(__name__)
+database.init_app(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'DoNotTellAnyone'
 app.config['JWT_BLACKLIST_ENABLED'] = True
 api = Api(app)
 jwt = JWTManager(app)
+
+
+@app.route('/')
+def index():
+    return '<h1> Bem Vindo!!!</h1>'
 
 
 @app.before_first_request
@@ -39,8 +47,3 @@ api.add_resource(Package, '/package/<string:package_code>')
 
 api.add_resource(Trackings, '/trackings')
 api.add_resource(Tracking, '/tracking/<int:tracking_id>')
-
-if __name__ == '__main__':
-    from sql_alchemy import database
-    database.init_app(app)
-    app.run(debug=True)
