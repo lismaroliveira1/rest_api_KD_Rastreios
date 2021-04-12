@@ -1,6 +1,4 @@
-# REST API KD RASTREIOS
-
-This api is being developed for a KD Rastreios application available in https://play.google.com/store/apps/details?id=br.com.dionisiusdev.kdrastreios
+# REST API WITH PYTHON AND FLASK
 
 
 ## Abstract
